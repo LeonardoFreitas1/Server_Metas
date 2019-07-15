@@ -1,0 +1,59 @@
+{
+  "name": "metas-certas",
+  "version": "1.0.0",
+  "description": "MetasCertas",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "client": "npm start --prefix client",
+    "server": "nodemon bin/dev",
+    "start": "npm install && npm run server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeonardoFreitas1/Metas_Empresas.git"
+  },
+  "keywords": [
+    "react"
+  ],
+  "author": "Bryce St. Pierre",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^3.6.1",
+    "eslint": "^5.16.0",
+    "nodemon": "^1.18.3",
+    "webpack-dev-server": "^3.4.0"
+  },
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.18.3",
+    "connect": "^3.6.6",
+    "connected-react-router": "^6.4.0",
+    "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "history": "^4.7.2",
+    "jsonwebtoken": "^8.5.1",
+    "merge": "^1.2.1",
+    "morgan": "^1.9.1",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7",
+    "pg": "^7.9.0",
+    "react": "^16.4.0",
+    "react-dom": "^16.8.6",
+    "react-redux": "^6.0.0",
+    "react-router": "^3.2.1",
+    "redux": "^3.6.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
+    "sequelize": "^5.7.3",
+    "serve-static": "^1.13.2"
+  },
+  "bugs": {
+    "url": "https://github.com/LeonardoFreitas1/Metas_Empresas/issues"
+  },
+  "homepage": "https://github.com/LeonardoFreitas1/Metas_Empresas#readme"
+}

@@ -1,5 +1,5 @@
 const sequelize = require('../db/index');
-const Sequelize = require('sequelize'); 
+const Sequelize = require('sequelize');
 const User_type = sequelize.define('usuarios_tipos', {
 
     id_tipo: {
@@ -7,7 +7,7 @@ const User_type = sequelize.define('usuarios_tipos', {
      autoIncrement: true,
      primaryKey: true
     },
-   
+  
     tipo: {
       type: Sequelize.CHAR,  
       length: 50

@@ -9,6 +9,7 @@ const JwtStrategy = passportJWT.Strategy;
 const jwtOptions = {};
 const user_type = require('../models/usuarios_tipos').getAllUserType;
 const user_empresa = require('../models/usuarios_empresas').getAllUserBusines;
+const atualiza = require('../models/usuarios').atualiza;
 const Users = require('../models/usuarios')
 const getAllUsers = Users.getAllUser;
 const createUser = Users.createUser;
@@ -114,6 +115,10 @@ router.get('/company', function(req, res) {
     const { Nome, data, tipo, setor } = req.body;
     addMeta({ Nome, data, tipo, setor }).then(user => res.json({user, msg: 'meta'}))
   })
-
+  
+  router.post('/atualiza', function(req, res){
+    const { novoConteudo, id } = req.body;
+    atualiza({novoConteudo, id}).then(user => res.json({user, msg: 'atualizado'}))
+  })
   
 module.exports = router;

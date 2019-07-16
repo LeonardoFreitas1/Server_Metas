@@ -7,6 +7,7 @@ const User_has_empresa = sequelize.define('usuarios_has_empresas', {
      autoIncrement: true,
      primaryKey: true
     },
+    
     id_empresa: {
         type: Sequelize.INTEGER,
           references: { 

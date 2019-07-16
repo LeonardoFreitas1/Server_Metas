@@ -36,7 +36,7 @@ const User = sequelize.define('usuarios', {
     },
     senha: {
       type: Sequelize.CHAR,
-    },
+    },  
     email: {
       type: Sequelize.CHAR,
     },
@@ -46,10 +46,7 @@ const User = sequelize.define('usuarios', {
     usuarios_tipos: {
       type: Sequelize.STRING
     },
-    
-    /*
-    Precisa dar um jeito de colocar mais uma coluna ae
-    se vira ai Leo do futuro ;-;
+
 
     ativo: {
       type: Sequelize.BOOLEAN,
@@ -59,7 +56,6 @@ const User = sequelize.define('usuarios', {
       }
     }
 
-    */
   }, { 
     timestamps: false, 
   });
@@ -85,6 +81,9 @@ const User = sequelize.define('usuarios', {
     })
     
   } 
+  exports.atualiza = async function atualiza(nome,id){
+    return await User.update({nome: nome},{where: id})
+  },
   exports.disable =  async function disable(obj)  {
     return await User.update({ 
       ativo: true,

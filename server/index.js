@@ -21,7 +21,7 @@ app.use('/addUser',  require('./routes/router'));
 app.use('/users', require('./routes/router'));
 app.use('/addAdmin', require('./routes/router'));
 app.use('/disable', require('./routes/router'));
-app.use('/atualiza', require('./routes/router');
+app.use('/atualiza', require('./routes/router'));
 //Metas
 app.use('/addMeta', require('./routes/router'));
 

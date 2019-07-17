@@ -65,7 +65,7 @@ router.post('/addUser', async function(req, res, next) {
     
   ).catch(err => {
     console.log(err),
-    res.send(err)
+    res.json({msg: err})
     
   })
 });
@@ -117,8 +117,9 @@ router.get('/company', function(req, res) {
   })
   
   router.post('/atualiza', function(req, res){
-    const { novoConteudo, id } = req.body;
-    atualiza({novoConteudo, id}).then(user => res.json({user, msg: 'atualizado'}))
+    const { novoConteudo, id, conteudo } = req.body;
+    console.log(conteudo)
+    atualiza({novoConteudo, id, conteudo}).then(user => res.json({user, msg: 'atualizado'}))
   })
   
 module.exports = router;

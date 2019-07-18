@@ -71,7 +71,7 @@ const User = sequelize.define('usuarios', {
   }
   
    exports.createUser = async function createUser({ cpf_cnpj, nome, usuario, senha, email, whatsapp, usuarios_tipos  })  {
-    return await User.create({ cpf_cnpj, nome,usuario, senha, email, whatsapp, usuarios_tipos })
+    return await User.create({ cpf_cnpj, nome, usuario, senha, email, whatsapp, usuarios_tipos })
   },
 
   

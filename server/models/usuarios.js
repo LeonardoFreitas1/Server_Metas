@@ -76,7 +76,7 @@ const User = sequelize.define('usuarios', {
 
   
   exports.getUser =  async function getUser(obj)  {
-    return await User.find({
+    return await User.findOne({
       where: obj,
     })
     

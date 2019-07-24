@@ -75,9 +75,10 @@ const User = sequelize.define('usuarios', {
   },
 
   
-  exports.getUser =  async function getUser(obj)  {
+  exports.getUser =  async function getUser({cpf_cnpj, obj})  {
     return await User.findOne({
-      where: obj,
+      where: {cpf_cnpj: cpf_cnpj},
+      attributes:{cpf_cnpj: obj}
     })
     
   },

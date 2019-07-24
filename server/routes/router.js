@@ -74,15 +74,14 @@ router.post('/addUser', async function(req, res, next) {
   
     const { cpf_cnpj, senha} = req.body;
     if (cpf_cnpj && senha) {
-      const user = await getUser({ 'cpf_cnpj': cpf_cnpj });
-console.log(user)
+      const user = await getUser({ cpf_cnpj: cpf_cnpj });
+      
       if (!user) {
         res.status(401).json({ message: 'Não foi possível encontrar o usuário' });
+      }
+      if (user.senha.trim() == senha) {
       
-      } 
-      if (user.senha === senha) {
-  
-        const payload = { id_usuario: user.id_usuario };
+        const payload = { senha: senha };
         const token = jwt.sign(payload, jwtOptions.secretOrKey);
         
         res.send(token); 

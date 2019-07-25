@@ -83,8 +83,8 @@ router.post('/addUser', async function(req, res, next) {
       
         const payload = { senha: senha };
         const token = jwt.sign(payload, jwtOptions.secretOrKey);
-        
-        res.send(token); 
+        console.log()
+        res.json({token: token, id: user.id_usuario}); 
       } else {
         res.status(401).json({ msg: 'A senha está incorreta!' });
       }
@@ -106,9 +106,10 @@ router.get('/company', function(req, res) {
   })
   
   router.post('/newCompany', function(req, res){
-    const { razao_social, cnpj } = req.body;
-   
-    createEmpresa({ razao_social, cnpj }).then(user => res.json({ user, msg: 'empresa'}))
+    const { razao_social, cpf_cnpj } = req.body;
+   console.log(razao_social)
+console.log(cpf_cnpj)
+    createEmpresa({ razao_social, cpf_cnpj }).then(user => res.json({ user, msg: 'empresa'}))
   })
 
   router.post('/addMeta', function(req, res){

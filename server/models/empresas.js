@@ -25,8 +25,8 @@ const empresa = sequelize.define('empresas', {
 .then(() => console.log('A tabela Empresas foi criada com sucesso!'))
 .catch(err => console.log('Não foi possível criar a tabela Empresas!'));
 
- module.exports = (async function createEmpresa({ razao_social, cnpj }) {
-    return await empresa.create({ razao_social, cnpj });
+ module.exports = (async function createEmpresa({ razao_social, cpf_cnpj }) {
+    return await empresa.create({ razao_social, cpf_cnpj });
   },
   async function getAllEmpresas() {
     return await empresa.findAll()

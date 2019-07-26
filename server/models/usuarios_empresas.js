@@ -31,7 +31,7 @@ const User_has_empresa = sequelize.define('usuarios_has_empresas', {
     },
     ativo: {
         type: Sequelize.BOOLEAN,
-        defaultValue: false,
+        defaultValue: true,
         primaryKey: true
     } 
 }, 
@@ -47,4 +47,14 @@ const User_has_empresa = sequelize.define('usuarios_has_empresas', {
   exports.getAllUserBusines =  async function() {
     return await User_has_empresa.findAll();
   } 
-  
+  exports.getUserHasCompany = async function getUserHasCompany({id_usuario, obj}){
+    return await User_has_empresa.findOne({
+      where: {id_usuario: id_usuario},
+      attributes:{id_usuario: obj}
+
+    })
+  }
+  exports.createUserHasCompany = async function createUserHasCompany({id_empresa, id_usuario, id_tipo}){
+    
+    return await User_has_empresa.create({ id_empresa, id_usuario, id_tipo })
+  }

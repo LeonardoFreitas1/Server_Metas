@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const jwtDecode = require('jwt-decode')
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const passportJWT = require('passport-jwt');
@@ -12,11 +12,15 @@ const user_empresa = require('../models/usuarios_empresas').getAllUserBusines;
 const atualiza = require('../models/usuarios').atualiza;
 const Users = require('../models/usuarios')
 const getAllUsers = Users.getAllUser;
+const getUserId = require('../models/usuarios').getUserId;
 const createUser = Users.createUser;
 const getUser = Users.getUser;
-const disable = require('../models/usuarios').disable
-const getAllEmpresas = require('../models/empresas');
-const createEmpresa = require('../models/empresas');
+const disable = require('../models/usuarios').disable;
+const getAllEmpresas = require('../models/empresas').getAllEmpresas;
+const createEmpresa = require('../models/empresas').createEmpresa;
+const getCompany = require('../models/empresas').getCompany;
+const addUserHasCompany = require('../models/usuarios_empresas').createUserHasCompany;
+const getUserHasCompany = require('../models/usuarios_empresas').getUserHasCompany;
 const addMeta = require('../models/metas');
 
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
@@ -79,12 +83,13 @@ router.post('/addUser', async function(req, res, next) {
       if (!user) {
         res.status(401).json({ message: 'Não foi possível encontrar o usuário' });
       }
+      
       if (user.senha.trim() == senha) {
       
-        const payload = { senha: senha };
-        const token = jwt.sign(payload, jwtOptions.secretOrKey);
-        console.log()
-        res.json({token: token, id: user.id_usuario}); 
+        const payload = { id_usuario: user.id_usuario };
+        const c_user = jwt.sign(payload, jwtOptions.secretOrKey);
+
+        res.json({c_user: c_user}); 
       } else {
         res.status(401).json({ msg: 'A senha está incorreta!' });
       }
@@ -95,6 +100,27 @@ router.get('/users', function(req, res) {
   getAllUsers().then(user => res.json({user}));
 });
  
+router.post('/getUser', async function(req, res){
+  const { id_usuario } = req.body;
+  const user = await getUserId({id_usuario: id_usuario})
+  const id_tipo = user.id_tipo
+  res.json({id_tipo})
+})
+
+router.post('/verifyId', async function(req, res){
+  let { id_usuario } = req.body;
+  const decoded = jwtDecode(id_usuario)
+   id_usuario = decoded.id_usuario
+  const user = await getUserId({id_usuario: id_usuario})
+
+  if(user.id_usuario == id_usuario){
+    res.send(true)
+  }else{
+    res.send(false)
+  }
+  
+})
+
 router.post('/disable', function(req, res){
   const { id } = req.body;
   console.log(id)
@@ -105,13 +131,18 @@ router.get('/company', function(req, res) {
     getAllEmpresas().then(user => res.json(user))
   })
   
-  router.post('/newCompany', function(req, res){
+  router.post('/newCompany', async function(req, res){
     const { razao_social, cpf_cnpj } = req.body;
-   console.log(razao_social)
-console.log(cpf_cnpj)
-    createEmpresa({ razao_social, cpf_cnpj }).then(user => res.json({ user, msg: 'empresa'}))
-  })
 
+   await createEmpresa({ razao_social, cpf_cnpj }).then(async user => {
+     
+     const company = await getCompany({ cpf_cnpj: cpf_cnpj });
+     res.json({body: company.id_empresa})
+
+  })
+  
+})
+  
   router.post('/addMeta', function(req, res){
     const { Nome, data, tipo, setor } = req.body;
     addMeta({ Nome, data, tipo, setor }).then(user => res.json({user, msg: 'meta'}))
@@ -121,6 +152,17 @@ console.log(cpf_cnpj)
     const { novoConteudo, id, conteudo } = req.body;
     console.log(conteudo)
     atualiza({novoConteudo, id, conteudo}).then(user => res.json({user, msg: 'atualizado'}))
+  })
+
+  router.post('/addUserHasCompany', async function(req, res){
+
+    const { id_empresa, id_usuario, id_tipo } =  req.body;
+    await addUserHasCompany({ id_empresa, id_usuario, id_tipo }).then(async user => {
+    
+    const data = await getUserHasCompany({id_usuario: id_usuario})
+    const id_usuario_empresa = data.id_usuario_empresa
+    res.json({id_usuario_empresa})
+    })
   })
   
 module.exports = router;

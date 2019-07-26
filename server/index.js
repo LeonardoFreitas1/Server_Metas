@@ -22,9 +22,13 @@ app.use('/users', require('./routes/router'));
 app.use('/addAdmin', require('./routes/router'));
 app.use('/disable', require('./routes/router'));
 app.use('/atualiza', require('./routes/router'));
+app.use('/getUser', require('./routes/router'));
+app.use('/verifyId', require('./routes/router'));
 //Metas
 app.use('/addMeta', require('./routes/router'));
 
+//Usuarios Empresas
+app.use('/addUserHasCompany', require('./routes/router'))
 //Empresas
 app.use('/company', require('./routes/router'));
 app.use('/addCompany', require('./routes/router'));

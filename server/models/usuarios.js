@@ -82,6 +82,14 @@ const User = sequelize.define('usuarios', {
     })
     
   },
+
+  exports.getUserId =  async function getUserId({ id_usuario })  {
+    return await User.findOne({
+      where: {id_usuario: id_usuario}
+    })
+    
+  },
+
   exports.atualiza = async function atualiza({novoConteudo, id, conteudo}){
     console.log(conteudo)
     

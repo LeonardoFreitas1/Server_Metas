@@ -24,8 +24,7 @@ const getUserHasCompany = require('../models/usuarios_empresas').getUserHasCompa
 const addMeta = require('../models/metas');
 
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-jwtOptions.secretOrKey = 'wowwow';
-
+jwtOptions.secretOrKey = process.env.KEY;
 const strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
   console.log('Payload', jwt_payload);
   const user = getUser({ id: jwt_payload.id });
@@ -162,6 +161,18 @@ router.get('/company', function(req, res) {
     const data = await getUserHasCompany({id_usuario: id_usuario})
     const id_usuario_empresa = data.id_usuario_empresa
     res.json({id_usuario_empresa})
+    })
+  })
+
+  router.post('/checkUser', function(req, res){
+    const { token } = req.body;
+  
+    jwt.verify(token, process.env.KEY, (err, data) => {
+      if(err){
+        res.send(false)
+      }else{
+        res.send(true);
+      }
     })
   })
   

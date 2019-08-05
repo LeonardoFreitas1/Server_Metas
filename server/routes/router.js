@@ -13,6 +13,7 @@ const atualiza = require('../models/usuarios').atualiza;
 const Users = require('../models/usuarios')
 const getAllUsers = Users.getAllUser;
 const getUserId = require('../models/usuarios').getUserId;
+const getType = require('../models/usuarios_tipos').getType;
 const createUser = Users.createUser;
 const getUser = Users.getUser;
 const disable = require('../models/usuarios').disable;
@@ -76,6 +77,7 @@ router.post('/addUser', async function(req, res, next) {
   router.post('/login', async function(req, res, next) {
   
     const { cpf_cnpj, senha} = req.body;
+    
     if (cpf_cnpj && senha) {
       const user = await getUser({ cpf_cnpj: cpf_cnpj });
       
@@ -100,23 +102,36 @@ router.get('/users', function(req, res) {
 });
  
 router.post('/getUser', async function(req, res){
-  const { id_usuario } = req.body;
-  const user = await getUserId({id_usuario: id_usuario})
-  const id_tipo = user.id_tipo
-  res.json({id_tipo})
+  const { token } = req.body;
+
+  jwt.verify(token, process.env.KEY, async (err, data) => {
+    if(err){
+      res.json(null)
+    }else{
+      
+      const user = await getUserId({id_usuario: data.id_usuario})
+      const id_tipo = { id_tipo: user.id_tipo }
+      const t_user = jwt.sign(id_tipo, jwtOptions.secretOrKey);
+      res.json({t_user})
+    }
+  })
+
+  
 })
 
 router.post('/verifyId', async function(req, res){
-  let { id_usuario } = req.body;
-  const decoded = jwtDecode(id_usuario)
-   id_usuario = decoded.id_usuario
-  const user = await getUserId({id_usuario: id_usuario})
+  let { type } = req.body;
 
-  if(user.id_usuario == id_usuario){
-    res.send(true)
-  }else{
-    res.send(false)
-  }
+  jwt.verify(type, process.env.KEY, async (err, data) => {
+    if(err){
+      res.json(null)
+    }else{
+      const user = await getType({type: data.id_tipo})
+      const tipo = { id_tipo: user.tipo }
+      res.json({tipo})
+    }
+  })
+
   
 })
 
@@ -156,20 +171,38 @@ router.get('/company', function(req, res) {
   router.post('/addUserHasCompany', async function(req, res){
 
     const { id_empresa, id_usuario, id_tipo } =  req.body;
-    await addUserHasCompany({ id_empresa, id_usuario, id_tipo }).then(async user => {
+    console.log(req.body)
+    await jwt.verify(id_tipo, process.env.KEY, async(err, data) => {
+      console.log(data)
+      if(err){
+        console.log(err)
+      }else{
+        await jwt.verify(id_usuario, process.env.KEY, async (error, dataUser) => {
+       if(error){
+         console.log(error)
+       }else{
+        console.log(data, dataUser)
+        console.log('Primeiro',data.id_tipo, data.id_usuario)
+        await addUserHasCompany({id_empresa}, dataUser.id_usuario,  data.id_tipo ).then(async user => {
     
-    const data = await getUserHasCompany({id_usuario: id_usuario})
-    const id_usuario_empresa = data.id_usuario_empresa
-    res.json({id_usuario_empresa})
+          const info = await getUserHasCompany({id_usuario: dataUser.id_usuario})
+          const id_usuario_empresa = info.id_usuario_empresa
+          res.json({id_usuario_empresa})
+          })
+       }
+        })
+      
+      }
     })
   })
 
   router.post('/checkUser', function(req, res){
     const { token } = req.body;
-  
+    
     jwt.verify(token, process.env.KEY, (err, data) => {
       if(err){
-        res.send(false)
+       
+        res.json(false)
       }else{
         res.send(true);
       }

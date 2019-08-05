@@ -16,14 +16,6 @@ const User = sequelize.define('usuarios', {
           key: 'id_empresa'
         }
      },
-
-    id_tipo: {
-        type: Sequelize.INTEGER,
-          references: { 
-            model: 'usuarios_tipos',
-            key: 'id_tipo'
-          }
-    },
     cpf_cnpj: {
       type: Sequelize.CHAR,
       length: 14
@@ -43,18 +35,7 @@ const User = sequelize.define('usuarios', {
     whatsapp: { 
       type: Sequelize.BIGINT
     },
-    usuarios_tipos: {
-      type: Sequelize.STRING
-    },
 
-
-    ativo: {
-      type: Sequelize.BOOLEAN,
-      references: {
-        model: 'usuarios_has_empresas',
-        key: 'ativo'
-      }
-    }
 
   }, { 
     timestamps: false, 
@@ -75,19 +56,19 @@ const User = sequelize.define('usuarios', {
   },
 
   
-  exports.getUser =  async function getUser({cpf_cnpj, obj})  {
+  exports.getUser =  async function getUser({ cpf_cnpj })  {
     return await User.findOne({
-      where: {cpf_cnpj: cpf_cnpj},
-      attributes:{cpf_cnpj: obj}
+      where: {cpf_cnpj: cpf_cnpj}
     })
     
   },
 
   exports.getUserId =  async function getUserId({ id_usuario })  {
+
     return await User.findOne({
       where: {id_usuario: id_usuario}
     })
-    
+   
   },
 
   exports.atualiza = async function atualiza({novoConteudo, id, conteudo}){

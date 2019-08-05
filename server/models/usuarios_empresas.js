@@ -2,7 +2,7 @@ const sequelize = require('../db/index');
 const Sequelize = require('sequelize'); 
 const User_has_empresa = sequelize.define('usuarios_has_empresas', {
 
-    id_usuario_empresa: {
+    id_usuarios_empresas: {
      type: Sequelize.INTEGER,
      autoIncrement: true,
      primaryKey: true
@@ -15,13 +15,6 @@ const User_has_empresa = sequelize.define('usuarios_has_empresas', {
             key: 'id_empresa'
           }
        },
-       id_tipo: {
-        type: Sequelize.INTEGER,
-          references: { 
-            model: 'usuarios_tipos',
-            key: 'id_tipo'
-          },
-        },
        id_usuario: {
         type: Sequelize.INTEGER,
         references: { 
@@ -33,8 +26,15 @@ const User_has_empresa = sequelize.define('usuarios_has_empresas', {
         type: Sequelize.BOOLEAN,
         defaultValue: true,
         primaryKey: true
-    } 
-}, 
+    },
+    id_tipo: {
+      type: Sequelize.INTEGER,
+        references: { 
+          model: 'usuarios_tipos',
+          key: 'id_tipo'
+        },
+      },
+},
     {
     timestamps: false,
     
@@ -54,7 +54,7 @@ const User_has_empresa = sequelize.define('usuarios_has_empresas', {
 
     })
   }
-  exports.createUserHasCompany = async function createUserHasCompany({id_empresa, id_usuario, id_tipo}){
-    
+  exports.createUserHasCompany = async function createUserHasCompany({id_empresa}, id_usuario, id_tipo){
+    console.log(id_empresa,'e',id_usuario, 'e', id_tipo)
     return await User_has_empresa.create({ id_empresa, id_usuario, id_tipo })
   }

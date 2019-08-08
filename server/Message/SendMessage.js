@@ -1,13 +1,10 @@
 const request = require('request');
-
-const Users = require('../models/usuarios');
-const getAllUsers = Users.getAllUser;
-
+const { getAllUser } = require('../models/usuarios');
 const url = process.env.URL;
 
 exports.sendMessage = function sendMessage(){
   
-getAllUsers() 
+getAllUser() 
         .then(info =>{        
         
         for(let i = 0; i < info.length; i++){

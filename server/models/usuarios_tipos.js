@@ -28,7 +28,7 @@ const User_type = sequelize.define('usuarios_tipos', {
   },
 
   exports.getType = async function getType({ type }){
-
+    console.log(type)
     return await User_type.findOne({
       where: {id_tipo: type}
     })

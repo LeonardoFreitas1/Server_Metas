@@ -1,7 +1,5 @@
 const hour = '13:00'
-
-const Message = require('./SendMessage');
-const SendMessage =  Message.sendMessage;
+const { sendMessage } = require('./SendMessage');
 
 function checkTime(i) {
   if (i < 10) {
@@ -19,7 +17,7 @@ exports.startSend = function startTime() {
   m = checkTime(m);
   
   if(hour == h + ":" + m || day == 5){
-    SendMessage();
+    sendMessage();
   }else{
   t = setTimeout(function() {
     startTime();

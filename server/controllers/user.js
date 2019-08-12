@@ -10,7 +10,6 @@ module.exports = {
        const { id_tipo, cpf_cnpj, nome, usuario, senha, email, whatsapp } = req.body;
         
        await createUser({ id_tipo, cpf_cnpj, nome, usuario, senha, email, whatsapp }).then(user =>
-        console.log(user),  
         res.send('foi')
           
         ).catch(err => {
@@ -34,13 +33,12 @@ module.exports = {
 
     async get(req, res){
         const { token } = req.body;
-
          jwt.verify(token, process.env.KEY, async (err, data) => {
             if(err){
                 res.json(null)
             }else{
+                const user = await getUserHasCompany({id_usuario: data.id_usuario})
 
-                const user = await getUserId({id_usuario: data.id_usuario})
                 const id_tipo = { id_tipo: user.id_tipo }
                 const t_user = jwt.sign(id_tipo, jwtOptions.secretOrKey);
                 res.json({t_user})
@@ -54,7 +52,7 @@ module.exports = {
             if(err){
                 res.json(null)
             }else{
-           
+        
         const user = await getType({type: data.id_tipo})
         const tipo = { id_tipo: user.tipo }
         res.json({tipo})
@@ -64,7 +62,6 @@ module.exports = {
 
     disable(req, res){
         const { id } = req.body;
-        console.log(id)
         disable(id).then(foi => res.json({foi}))
     },
 
@@ -96,7 +93,6 @@ module.exports = {
     
     check(req, res){
         const { token } = req.body;
-    
         jwt.verify(token, process.env.KEY, (err, data) => {
             if(err){
                 res.json(false)
@@ -110,6 +106,12 @@ module.exports = {
         const { novoConteudo, id, conteudo } = req.body;
         console.log(conteudo)
         atualiza({novoConteudo, id, conteudo}).then(user => res.json({user, msg: 'atualizado'}))
+    },
+
+    async getAdm(req, res){
+        const userList = await getAllUser()
+        console.log(userList)
+        res.json(userList)
     }
 
 }

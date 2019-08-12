@@ -13,5 +13,11 @@ module.exports = {
           res.json({body: company.id_empresa})
      
        })
+
+    },
+
+    async list(req, res){
+        const list = await getAllEmpresas()
+        res.json(list)
     }
 }

@@ -48,6 +48,7 @@ const User_has_empresa = sequelize.define('usuarios_has_empresas', {
     return await User_has_empresa.findAll();
   } 
   exports.getUserHasCompany = async function getUserHasCompany({id_usuario, obj}){
+  
     return await User_has_empresa.findOne({
       where: {id_usuario: id_usuario},
       attributes:{id_usuario: obj}

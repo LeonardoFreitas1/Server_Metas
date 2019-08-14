@@ -32,4 +32,5 @@ const User_type = sequelize.define('usuarios_tipos', {
     return await User_type.findOne({
       where: {id_tipo: type}
     })
+   
   }

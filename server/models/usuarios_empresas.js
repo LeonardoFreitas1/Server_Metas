@@ -55,7 +55,22 @@ const User_has_empresa = sequelize.define('usuarios_has_empresas', {
 
     })
   }
-  exports.createUserHasCompany = async function createUserHasCompany({id_empresa}, id_usuario, id_tipo){
-    console.log(id_empresa,'e',id_usuario, 'e', id_tipo)
+
+  exports.createUserHasCompany = async function createUserHasCompany({id_empresa, id_usuario, id_tipo}){
     return await User_has_empresa.create({ id_empresa, id_usuario, id_tipo })
   }
+
+  exports.disable =  async function disable(obj)  {
+    return await User_has_empresa.update({ 
+      ativo: false,
+    },{
+      where: {id_usuario: obj}
+    })
+ 
+}
+
+exports.getUsersType = async function getUsersType({ id_usuario }){
+  return await User_has_empresa.findOne({
+    where: {id_usuario: id_usuario}
+  })
+}

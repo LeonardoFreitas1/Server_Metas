@@ -1,17 +1,17 @@
-const { disable, getAllUser, getUser, getUserId, atualiza, createUser } = require('../models/usuarios');
+const { getAllUser, getUser, getUserId, atualiza, createUser } = require('../models/usuarios');
 const { getAllUserType, getType } = require('../models/usuarios_tipos')
-const { createUserHasCompany, getUserHasCompany, getAllUserBusines } = require('../models/usuarios_empresas')
+const { createUserHasCompany, getUserHasCompany, getAllUserBusines, disable, isActive, getUsersType } = require('../models/usuarios_empresas')
 const jwt = require('jsonwebtoken');
 const jwtOptions = { secretOrKey: process.env.KEY }
 
 module.exports = {
 
    async store(req, res) {
-       const { id_tipo, cpf_cnpj, nome, usuario, senha, email, whatsapp } = req.body;
-        
-       await createUser({ id_tipo, cpf_cnpj, nome, usuario, senha, email, whatsapp }).then(user =>
-        res.send('foi')
+       const { cpf_cnpj, nome, usuario, senha, email, whatsapp } = req.body;
+       await createUser({ cpf_cnpj, nome, usuario, senha, email, whatsapp }).then(user =>{
           
+        res.json({ message: "usuário adicionado", id_usuario: user.id_usuario })
+       }
         ).catch(err => {
           console.log(err),
           res.json({msg: err})
@@ -60,36 +60,18 @@ module.exports = {
       })
     },
 
-    disable(req, res){
+    async disable(req, res){
         const { id } = req.body;
-        disable(id).then(foi => res.json({foi}))
+        await disable(id).then(foi => res.json({foi}))
     },
 
     async company(req, res){
 
     const { id_empresa, id_usuario, id_tipo } =  req.body;
     
-    await jwt.verify(id_tipo, process.env.KEY, async(err, data) => {
-     
-      if(err){
-        console.log(err)
-      }else{
-        await jwt.verify(id_usuario, process.env.KEY, async (error, dataUser) => {
-       if(error){
-         console.log(error)
-       }else{
-
-            await addUserHasCompany({id_empresa}, dataUser.id_usuario,  data.id_tipo ).then(async user => {
-    
-                const info = await getUserHasCompany({id_usuario: dataUser.id_usuario})
-                const id_usuario_empresa = info.id_usuario_empresa
-                res.json({id_usuario_empresa})
-              })
-            }
-        })
-        }
-    })
-    },
+            await createUserHasCompany({id_empresa, id_usuario,  id_tipo })
+            res.json({message: "usuario adicionado"})
+ },
     
     check(req, res){
         const { token } = req.body;
@@ -103,15 +85,36 @@ module.exports = {
     },
 
     upload(req, res){
-        const { novoConteudo, id, conteudo } = req.body;
-        console.log(conteudo)
-        atualiza({novoConteudo, id, conteudo}).then(user => res.json({user, msg: 'atualizado'}))
+        const { cpf_cnpj, id, nome, email, senha, whatsapp, usuario } = req.body;
+        atualiza({cpf_cnpj, id, nome, email, senha, whatsapp, usuario}).then(user => res.json({user, msg: 'atualizado'}))
     },
 
     async getAdm(req, res){
         const userList = await getAllUser()
-        console.log(userList)
         res.json(userList)
-    }
+    },
 
+    async active(req, res){
+        const { id } = req.body
+        
+        if(await getUserHasCompany({id_usuario: id})){
+            const user = await getUserHasCompany({id_usuario: id})
+            res.json({ativo: user.ativo})
+        }else{
+            res.json({ativo: false})
+        }
+},
+
+    async allType(req, res){
+        const types = await getAllUserType()
+        res.json(types)
+    },
+
+    async typeUser(req, res){
+        const { id_usuario } = req.body
+        const typeUser = await getUsersType ({ id_usuario: id_usuario })
+        res.json({tipo: typeUser.id_tipo})
+    }
+   
 }
+ 

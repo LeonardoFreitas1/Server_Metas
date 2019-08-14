@@ -51,8 +51,8 @@ const User = sequelize.define('usuarios', {
     return await User.findAll();
   }
   
-   exports.createUser = async function createUser({ cpf_cnpj, nome, usuario, senha, email, whatsapp, usuarios_tipos  })  {
-    return await User.create({ cpf_cnpj, nome, usuario, senha, email, whatsapp, usuarios_tipos })
+   exports.createUser = async function createUser({ cpf_cnpj, nome, usuario, senha, email, whatsapp })  {
+    return await User.create({ cpf_cnpj, nome, usuario, senha, email, whatsapp })
   },
 
   
@@ -71,23 +71,17 @@ const User = sequelize.define('usuarios', {
    
   },
 
-  exports.atualiza = async function atualiza({novoConteudo, id, conteudo}){
-    console.log(conteudo)
+  exports.atualiza = async function atualiza({cpf_cnpj, id, nome, usuario, senha, email, whatsapp }){
     
-    switch(conteudo){
-      case 'cpf_cnpj': return await User.update({cpf_cnpj: novoConteudo},{ where: {id_usuario: id}});
-      case 'nome': return await User.update({nome: novoConteudo},{ where: {id_usuario: id}});
-      case 'whatsapp': return await User.update({whatsapp: novoConteudo},{ where: {id_usuario: id}});
-      case 'email': return await User.update({email: novoConteudo},{ where: {id_usuario: id}})
-      case 'usuarios_tipos': return await User.update({usuarios_tipos: novoConteudo},{ where: {id_usuario: id}})
-    }
+    User.update({
+      cpf_cnpj: cpf_cnpj,
+      nome: nome,
+      usuario: usuario,
+      senha: senha,
+      email: email,
+      whatsapp: whatsapp},
+      { where: {id_usuario: id }})
 
-  },
+  }
 
-  exports.disable =  async function disable(obj)  {
-    return await User.update({ 
-      ativo: true,
-    },{
-      where: {id_usuario: obj}
-    })
-}
+  

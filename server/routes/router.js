@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { type, store, company, admin, get, id, disable, check, upload, getAdm } = require('../controllers/user');
+const { type, store, company, admin, get, id, disable, check, upload, getAdm, active, allType, typeUser } = require('../controllers/user');
 const { login } = require('../controllers/auth');
 const { add, list } = require('../controllers/company');
 const { goal } = require('../controllers/goal');
@@ -13,6 +13,8 @@ router.get('/', (req, res) => {
 router.post('/addAdmin', admin);
 
 router.get('/usuarios_tipos', type);
+
+router.post('/isActive', active);
 
 router.post('/addUser', store);
 
@@ -31,6 +33,10 @@ router.post('/atualiza', upload);
 router.post('/addUserHasCompany', company);
 
 router.post('/checkUser', check);
+
+router.get('/allType', allType);
+
+router.post('/userType', typeUser);
 
 //Company
 router.post('/newCompany', add);

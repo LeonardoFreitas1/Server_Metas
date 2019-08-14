@@ -10,7 +10,7 @@ module.exports = {
         await createEmpresa({ razao_social, cpf_cnpj }).then(async user => {
           
           const company = await getCompany({ cpf_cnpj: cpf_cnpj });
-          res.json({body: company.id_empresa})
+          res.json({message: "empresa criada!"})
      
        })
 

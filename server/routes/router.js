@@ -34,6 +34,7 @@ router.post('/checkUser', check);
 
 //Company
 router.post('/newCompany', add);
+
 router.get('/CompanyList', list);
 
 //Goals

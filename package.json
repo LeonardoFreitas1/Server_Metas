@@ -25,7 +25,7 @@
     "webpack-dev-server": "^3.4.0"
   },
   "dependencies": {
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.18.3",
     "connect": "^3.6.6",
     "connected-react-router": "^6.4.0",
